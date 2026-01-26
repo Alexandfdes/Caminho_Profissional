@@ -1,0 +1,8 @@
+# Supabase CLI configuration
+# Function-specific configuration
+
+[functions.analyze-cv]
+verify_jwt = false
+
+[functions.gemini-json]
+verify_jwt = false

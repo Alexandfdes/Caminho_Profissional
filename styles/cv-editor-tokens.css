@@ -1,0 +1,569 @@
+/* CV Editor theme tokens (scoped)
+   Palette requested:
+   bg #0B1220, surface #111B2E, border #20304A, text #E6EDF6,
+   muted #AAB6C5, accent #2DD4BF, primary hover #14B8A6.
+*/
+
+.cv-editor-theme {
+  /*
+    App tokens (dark)
+    Goal: professional/corporate, low-saturation neutrals with teal as accent.
+  */
+  --app-bg: #0b1220;
+  --app-surface: #111b2e;
+  --app-surface-elevated: #15223a;
+  --app-border: rgba(230, 237, 246, 0.10);
+  --app-border-weak: rgba(230, 237, 246, 0.08);
+  --app-text: #e6edf6;
+  --app-muted: rgba(230, 237, 246, 0.72);
+  --app-accent: #2dd4bf;
+  --app-accent-hover: #22c7b3;
+
+  /* Required aliases (requested naming) */
+  --surface: var(--app-surface);
+  --surface-2: var(--app-surface-elevated);
+  --border: var(--app-border);
+  --text: var(--app-text);
+  --muted: var(--app-muted);
+  --accent: var(--app-accent);
+  --accent-hover: var(--app-accent-hover);
+
+  /* Back-compat aliases (existing code uses these) */
+  --cv-bg: var(--app-bg);
+  --cv-surface: var(--app-surface);
+  --cv-border: var(--app-border);
+  --cv-text: var(--app-text);
+  --cv-muted: var(--app-muted);
+  --cv-accent: var(--app-accent);
+  --cv-accent-hover: var(--app-accent-hover);
+
+  --cv-bg-a90: rgba(11, 18, 32, 0.90);
+  --cv-bg-a80: rgba(11, 18, 32, 0.80);
+  /* Editor surfaces: slightly more opaque so the form doesn't look disabled */
+  --cv-surface-a85: rgba(17, 27, 46, 0.92);
+  --cv-surface-elev-a88: rgba(21, 34, 58, 0.88);
+  --cv-accent-a12: rgba(45, 212, 191, 0.12);
+  --cv-accent-a18: rgba(45, 212, 191, 0.18);
+  --cv-accent-a28: rgba(45, 212, 191, 0.28);
+
+  /* Subtle neutrals */
+  --cv-border-weak: rgba(230, 237, 246, 0.10);
+  --cv-border-mid: rgba(230, 237, 246, 0.16);
+
+  /* Minimal shadows (no glow) */
+  --cv-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.28);
+  --cv-shadow-2: 0 10px 28px rgba(0, 0, 0, 0.36);
+  --cv-shadow-page: 0 10px 26px rgba(0, 0, 0, 0.30);
+
+  /* Required shadow aliases */
+  --shadow-card: var(--cv-shadow-1);
+  --shadow-paper: var(--cv-paper-shadow);
+
+  /* ==============================
+     Editor contrast + input states
+     ============================== */
+  /* Slightly different from app bg so the editor column reads as a distinct pane */
+  --editor-surface: #0b1426;
+
+  /* Requested tokens (canonical) */
+  --editor-card-bg: rgba(17, 27, 46, 0.94);
+  --editor-card-border: rgba(230, 237, 246, 0.14);
+
+  --input-bg: rgba(255, 255, 255, 0.065);
+  --input-border: rgba(230, 237, 246, 0.14);
+  --input-border-hover: rgba(230, 237, 246, 0.21);
+  --input-border-focus: rgba(45, 212, 191, 0.62);
+  --input-text: rgba(230, 237, 246, 0.92);
+  --input-placeholder: rgba(230, 237, 246, 0.52);
+
+  --label-text: rgba(230, 237, 246, 0.70);
+  --muted-text: rgba(230, 237, 246, 0.78);
+
+  /* Derived helper tokens */
+  --input-bg-hover: rgba(255, 255, 255, 0.075);
+  --input-bg-focus: rgba(255, 255, 255, 0.085);
+  --focus-ring: 0 0 0 3px rgba(45, 212, 191, 0.18);
+
+  /* Back-compat aliases (existing code uses these) */
+  --editor-card: var(--editor-card-bg);
+  --editor-border: var(--editor-card-border);
+  --editor-text: var(--input-text);
+  --editor-muted: var(--muted-text);
+
+    /* Back-compat: keep existing variables wired to new tokens */
+    --cv-input-bg: var(--input-bg);
+    --cv-input-border: var(--input-border);
+    --cv-input-border-hover: var(--input-border-hover);
+    --cv-input-placeholder: var(--input-placeholder);
+
+  /* Background: near-imperceptible */
+  --cv-bg-gradient: radial-gradient(1100px 650px at 18% 0%, rgba(45, 212, 191, 0.04) 0%, rgba(11, 18, 32, 0) 60%),
+    radial-gradient(1000px 700px at 85% 18%, rgba(20, 184, 166, 0.03) 0%, rgba(11, 18, 32, 0) 58%);
+
+  /* Document preview tokens */
+  /* Required paper aliases */
+  --paper-bg-light: #f8fafc;
+  --paper-text-light: #0f172a;
+  --paper-bg-dark: #0f172a;
+  --paper-text-dark: #e6edf6;
+  --paper-muted-dark: rgba(230, 237, 246, 0.72);
+  --paper-border-dark: rgba(255, 255, 255, 0.08);
+
+  --paper-bg: #f8fafc;
+  --paper-surface: #f1f5f9;
+  --paper-text: #0f172a;
+  --paper-title: #0b1220;
+  --paper-muted: #475569;
+  --paper-muted-2: #334155;
+  --paper-border: rgba(15, 23, 42, 0.10);
+
+  /* Back-compat aliases used by TemplateDefault */
+  --cv-doc-bg: var(--paper-bg);
+  --cv-doc-surface: var(--paper-surface);
+  --cv-doc-text: var(--paper-text);
+  --cv-doc-title: var(--paper-title);
+  --cv-doc-muted: var(--paper-muted);
+  --cv-doc-muted-2: var(--paper-muted-2);
+  --cv-doc-border: var(--paper-border);
+
+  /* Preview stage (dark workspace around the paper) */
+  /* Requested: #0F172A with subtle radial (~5%) */
+  --preview-stage-bg: #0f172a;
+  --preview-stage-gradient: radial-gradient(closest-side at 50% 35%, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0) 70%);
+  --preview-stage-pad: 32px;
+
+  /* Back-compat aliases */
+  --cv-preview-stage-bg: var(--preview-stage-bg);
+  --cv-preview-stage-gradient: var(--preview-stage-gradient);
+  --cv-preview-stage-pad: var(--preview-stage-pad);
+
+  /* Paper wrapper (preview-only) */
+  --cv-paper-bg: var(--paper-bg);
+  --cv-paper-border: rgba(15, 23, 42, 0.10);
+  --cv-paper-radius: 8px;
+  --cv-paper-shadow: 0 12px 30px rgba(0, 0, 0, 0.30), 0 2px 6px rgba(0, 0, 0, 0.18);
+
+  --cv-selection: rgba(45, 212, 191, 0.22);
+
+  background: var(--cv-bg);
+  background-image: var(--cv-bg-gradient);
+  color: var(--cv-text);
+}
+
+.cv-editor-theme ::selection {
+  background: var(--cv-selection);
+}
+
+/* ==============================
+   Print-safe truncation helpers
+   ============================== */
+.truncate-on-screen {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
+}
+
+/* Resume contacts should never show ellipsis; always wrap (screen + print). */
+.cv-doc-contact {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+  max-width: 100%;
+  display: block;
+  min-width: 0;
+}
+
+@media print {
+  .truncate-on-screen {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  .cv-doc-contact {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    hyphens: none !important;
+  }
+
+  #print-container .cv-doc-contact {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    hyphens: none !important;
+  }
+
+  .wrap-on-print {
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    hyphens: auto !important;
+  }
+
+  /* Email: avoid "anywhere" breaks; rely on normal breaking + ZWSP hints */
+  .wrap-email-on-print {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: none !important;
+  }
+
+  /* Extra strength so #print-container rules don't override */
+  #print-container .wrap-email-on-print {
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: none !important;
+  }
+
+  /* Make sure contact values can actually wrap in PDF */
+  #print-container .cv-doc-link {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
+    hyphens: auto !important;
+  }
+
+  /* Resume contacts: don't allow "anywhere" breaks; keep them readable without ellipsis */
+  #print-container .cv-doc-link.cv-doc-contact {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    overflow-wrap: break-word !important;
+    word-break: normal !important;
+    hyphens: none !important;
+  }
+}
+
+/* Links inside TipTap */
+.cv-editor-theme .cv-link {
+  color: var(--cv-accent);
+}
+
+/* Reduce default prose "inverted" harshness in editor */
+.cv-editor-theme .cv-prose {
+  line-height: 1.6;
+}
+
+/* Preview stage + paper look */
+.cv-editor-theme .cv-preview-stage {
+  background: var(--cv-preview-stage-bg);
+  background-image: var(--cv-preview-stage-gradient);
+  padding: var(--cv-preview-stage-pad);
+}
+
+.cv-editor-theme .cv-paper {
+  background: var(--cv-paper-bg);
+  border: 1px solid var(--cv-paper-border);
+  border-radius: var(--cv-paper-radius);
+  box-shadow: var(--cv-paper-shadow);
+  overflow: hidden;
+}
+
+/* Preview mode override (dark paper only affects the paper subtree) */
+.cv-editor-theme .cv-paper[data-preview-mode='dark'] {
+  --paper-bg: var(--paper-bg-dark);
+  --paper-surface: #111b2e;
+  --paper-text: var(--paper-text-dark);
+  --paper-title: var(--paper-text-dark);
+  --paper-muted: var(--paper-muted-dark);
+  --paper-muted-2: rgba(230, 237, 246, 0.86);
+  --paper-border: var(--paper-border-dark);
+
+  --cv-doc-bg: var(--paper-bg);
+  --cv-doc-surface: var(--paper-surface);
+  --cv-doc-text: var(--paper-text);
+  --cv-doc-title: var(--paper-title);
+  --cv-doc-muted: var(--paper-muted);
+  --cv-doc-muted-2: var(--paper-muted-2);
+  --cv-doc-border: var(--paper-border);
+
+  --cv-paper-bg: var(--paper-bg);
+  --cv-paper-border: var(--paper-border-dark);
+  --cv-paper-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), 0 3px 10px rgba(0, 0, 0, 0.30);
+}
+
+/* Preview typography helpers (used by TemplateDefault) */
+.cv-editor-theme .cv-doc-name {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.cv-editor-theme .cv-doc-role {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--cv-doc-muted-2);
+}
+
+.cv-editor-theme .cv-doc-section-title {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--cv-doc-title);
+}
+
+.cv-editor-theme .cv-doc-body {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--cv-doc-text);
+}
+
+.cv-editor-theme .cv-doc-muted {
+  color: var(--cv-doc-muted);
+}
+
+.cv-editor-theme .cv-doc-link {
+  display: block;
+  min-width: 0;
+}
+
+/* ==============================
+   Resume template (A4 content)
+   ============================== */
+
+.cv-editor-theme {
+  --resume-brand: #0f766e;
+  --resume-brand-ink: #ffffff;
+  --resume-brand-bg: var(--resume-brand);
+  --resume-sidebar-bg: #f1f5f9;
+  --resume-paper-bg: #ffffff;
+  --resume-text: #0f172a;
+  --resume-muted: #475569;
+  --resume-line: rgba(15, 23, 42, 0.10);
+  --resume-accent: rgba(20, 184, 166, 0.28);
+
+  --resume-body-size: 13px;
+  --resume-body-line: 1.65;
+  --resume-section-title-size: 19px;
+  --resume-section-title-weight: 600;
+  --resume-sidebar-title-size: 14px;
+
+  --resume-badge-height: 110px;
+  --resume-badge-pad-x: 20px;
+  --resume-badge-pad-y: 18px;
+  --resume-badge-radius: 8px;
+}
+
+.cv-editor-theme .cv-paper[data-preview-mode='dark'] {
+  --resume-brand-bg: color-mix(in srgb, var(--resume-brand) 88%, transparent);
+  --resume-paper-bg: #0f172a;
+  --resume-sidebar-bg: #111c2e;
+  --resume-text: #e6edf6;
+  --resume-muted: #aab6c5;
+  --resume-line: rgba(255, 255, 255, 0.08);
+  --resume-accent: rgba(20, 184, 166, 0.22);
+}
+
+.cv-editor-theme .cv-resume-root {
+  background: var(--resume-paper-bg);
+  color: var(--resume-text);
+  font-size: var(--resume-body-size);
+  line-height: var(--resume-body-line);
+}
+
+.cv-editor-theme .cv-resume-sidebar {
+  background: var(--resume-sidebar-bg);
+  padding: 26px;
+  border-right: 1px solid var(--resume-line);
+}
+
+.cv-editor-theme .cv-resume-main {
+  background: var(--resume-paper-bg);
+  padding: 32px;
+}
+
+.cv-editor-theme .cv-resume-badge {
+  background: var(--resume-brand-bg);
+  color: var(--resume-brand-ink);
+  min-height: var(--resume-badge-height);
+  padding: var(--resume-badge-pad-y) var(--resume-badge-pad-x);
+  border-radius: var(--resume-badge-radius) var(--resume-badge-radius) 0 0;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: -26px -26px 0;
+}
+
+.cv-editor-theme .cv-resume-badge-sep {
+  height: 1px;
+  width: calc(100% + 52px);
+  margin-left: -26px;
+  margin-right: -26px;
+  background: var(--resume-line);
+}
+
+.cv-editor-theme .cv-resume-name {
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  opacity: 0.96;
+  text-transform: none;
+}
+
+.cv-editor-theme .cv-resume-role {
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  opacity: 0.9;
+}
+
+.cv-editor-theme .cv-resume-sidebar-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  color: var(--resume-text);
+}
+
+.cv-editor-theme .cv-resume-section-title {
+  font-size: var(--resume-section-title-size);
+  font-weight: var(--resume-section-title-weight);
+  line-height: 1.25;
+  color: color-mix(in srgb, var(--resume-brand) 85%, var(--resume-text));
+}
+
+.cv-editor-theme .cv-resume-section-divider {
+  margin-top: 8px;
+  height: 1px;
+  width: 92%;
+  background: var(--resume-line);
+  opacity: 0.62;
+}
+
+.cv-editor-theme .cv-resume-section-accent {
+  margin-top: -1px;
+  height: 1px;
+  width: 44px;
+  background: var(--resume-brand);
+  opacity: 0.35;
+}
+
+.cv-editor-theme .cv-resume-muted {
+  color: var(--resume-muted);
+}
+
+.cv-editor-theme .cv-resume-link {
+  color: var(--resume-text);
+  text-decoration: none;
+}
+
+.cv-editor-theme .cv-resume-link:hover {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--resume-brand) 70%, transparent);
+  text-underline-offset: 2px;
+}
+
+/* Micro-typography for sidebar contacts */
+.cv-editor-theme .cv-resume-contacts {
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+/* Skills list: auto switch to 2 columns when needed (print-friendly) */
+.cv-editor-theme .cv-resume-skills-list.is-one-col {
+  column-count: 1;
+}
+
+.cv-editor-theme .cv-resume-skills-list.is-two-cols {
+  column-count: 2;
+  column-gap: 16px;
+}
+
+.cv-editor-theme .cv-resume-skills-item {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+@media print {
+  #print-container .cv-resume-skills-item {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    -webkit-column-break-inside: avoid !important;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  /* PDF export always uses light paper/document tokens for recruiter/print compatibility */
+  #print-container {
+    --cv-doc-bg: #ffffff;
+    --cv-doc-surface: #ffffff;
+    --cv-doc-text: #0f172a;
+    --cv-doc-title: #0b1220;
+    --cv-doc-muted: #475569;
+    --cv-doc-muted-2: #334155;
+    --cv-doc-border: rgba(15, 23, 42, 0.10);
+
+    --resume-brand: #0f766e;
+    --resume-brand-ink: #ffffff;
+    --resume-brand-bg: #0f766e;
+    --resume-sidebar-bg: #f1f5f9;
+    --resume-paper-bg: #ffffff;
+    --resume-text: #0f172a;
+    --resume-muted: #475569;
+    --resume-line: rgba(15, 23, 42, 0.10);
+    --resume-accent: rgba(20, 184, 166, 0.22);
+
+    --resume-body-size: 12px;
+    --resume-section-title-size: 18px;
+  }
+
+  /* Make links clearly identifiable on paper/PDF */
+  #print-container .cv-resume-link {
+    text-decoration: underline;
+    text-decoration-color: rgba(15, 23, 42, 0.35);
+    text-underline-offset: 2px;
+  }
+
+  /* Avoid ugly splits (Chromium) */
+  #print-container .resume-sidebar-block,
+  #print-container .resume-section,
+  #print-container .resume-contact-item,
+  #print-container .resume-education-item,
+  #print-container .resume-experience-item,
+  #print-container .resume-course-item {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .cv-paper {
+    --cv-doc-bg: #ffffff;
+    --cv-doc-surface: #ffffff;
+    --cv-doc-text: #0f172a;
+    --cv-doc-title: #0b1220;
+    --cv-doc-muted: #475569;
+    --cv-doc-muted-2: #334155;
+    --cv-doc-border: rgba(15, 23, 42, 0.10);
+
+    background: #ffffff !important;
+    border: 1px solid rgba(15, 23, 42, 0.10) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}

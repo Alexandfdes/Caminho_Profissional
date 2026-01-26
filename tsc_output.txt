@@ -1,0 +1,15 @@
+﻿components/CVAnalyzerStep.tsx(48,71): error TS2345: Argument of type '{ onDrop: any; accept: { 'application/pdf': string[]; 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': string[]; }; maxFiles: number; disabled: any; }' is not assignable to parameter of type 'DropzoneOptions'.
+  Type '{ onDrop: any; accept: { 'application/pdf': string[]; 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': string[]; }; maxFiles: number; disabled: any; }' is missing the following properties from type 'Pick<React.HTMLProps<HTMLElement>, PropTypes>': multiple, onDragEnter, onDragOver, onDragLeave
+components/CVEditorStep.tsx(85,35): error TS2304: Cannot find name 'generatePDF'.
+components/CVUploadZone.tsx(35,71): error TS2345: Argument of type '{ onDrop: any; accept: { 'application/pdf': string[]; }; maxSize: number; multiple: boolean; disabled: any; }' is not assignable to parameter of type 'DropzoneOptions'.
+  Type '{ onDrop: any; accept: { 'application/pdf': string[]; }; maxSize: number; multiple: boolean; disabled: any; }' is missing the following properties from type 'Pick<React.HTMLProps<HTMLElement>, PropTypes>': onDragEnter, onDragOver, onDragLeave
+components/ErrorBoundary.tsx(27,14): error TS2339: Property 'setState' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(31,14): error TS2339: Property 'setState' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(40,22): error TS2339: Property 'props' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(41,29): error TS2339: Property 'props' does not exist on type 'ErrorBoundary'.
+components/ErrorBoundary.tsx(98,21): error TS2339: Property 'props' does not exist on type 'ErrorBoundary'.
+components/SupabaseStatusCard.tsx(2,10): error TS2305: Module '"../services/supabaseService"' has no exported member 'fetchTopCareers'.
+services/geminiServiceWithEnhancement.ts(180,35): error TS2345: Argument of type '"cv_enhance"' is not assignable to parameter of type 'RequestType'.
+services/supabaseService.ts(274,21): error TS2339: Property 'eq' does not exist on type 'PostgrestQueryBuilder<any, any, any, "resume_analysis_cache", unknown>'.
+services/supabaseService.ts(278,21): error TS2339: Property 'eq' does not exist on type 'PostgrestQueryBuilder<any, any, any, "resume_analysis_cache", unknown>'.
+services/supabaseService.ts(282,21): error TS2339: Property 'lte' does not exist on type 'PostgrestQueryBuilder<any, any, any, "resume_analysis_cache", unknown>'.
