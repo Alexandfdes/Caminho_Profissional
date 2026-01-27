@@ -18,6 +18,10 @@ import { QuizPage } from './pages/QuizPage';
 import { ResultsPage } from './pages/ResultsPage';
 import { FinalPlanPage } from './pages/FinalPlanPage';
 import { PlanTrackerPage } from './pages/PlanTrackerPage';
+import { AboutPage } from './pages/AboutPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { TermsPage } from './pages/TermsPage';
+import { PaymentPlansPage } from './pages/PaymentPlansPage';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{
@@ -309,6 +313,12 @@ const AppRouter: React.FC = () => {
                         </ProtectedRoute>
                     }
                 />
+
+                {/* Static Pages */}
+                <Route path="/sobre" element={<AboutPage />} />
+                <Route path="/politica-de-privacidade" element={<PrivacyPage />} />
+                <Route path="/termos-de-uso" element={<TermsPage />} />
+                <Route path="/planos" element={<PaymentPlansPage />} />
 
                 {/* Main App Route - Landing, Auth, Questions, etc - MUST BE LAST */}
                 <Route path="/" element={<App />} />

@@ -31,26 +31,14 @@ export const Footer: React.FC = () => {
                         <p className="text-slate-400 text-sm leading-relaxed mb-6">
                             Sua bússola na era da inteligência artificial. Descubra sua vocação e trace o plano perfeito para sua carreira.
                         </p>
-                        <div className="flex items-center gap-4">
-                            <a href="#" className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:bg-teal-500 hover:text-white transition-all">
-                                <Instagram className="w-4 h-4" />
-                            </a>
-                            <a href="#" className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:bg-teal-500 hover:text-white transition-all">
-                                <Linkedin className="w-4 h-4" />
-                            </a>
-                            <a href="#" className="w-8 h-8 flex items-center justify-center rounded-lg bg-slate-800 text-slate-400 hover:bg-teal-500 hover:text-white transition-all">
-                                <Github className="w-4 h-4" />
-                            </a>
-                        </div>
+                        {/* Social links removed to comply with AdSense (no dead links) */}
                     </div>
 
                     {/* Links Columns */}
                     <div>
                         <h4 className="text-white font-bold mb-6">Plataforma</h4>
                         <ul className="space-y-4">
-                            <li><button onClick={() => handleLinkClick('/')} className="text-slate-400 hover:text-teal-400 text-sm transition-colors">Início</button></li>
-                            <li><a href="#features" className="text-slate-400 hover:text-teal-400 text-sm transition-colors">Como Funciona</a></li>
-                            <li><a href="#testimonials" className="text-slate-400 hover:text-teal-400 text-sm transition-colors">Depoimentos</a></li>
+                            <li><button onClick={() => handleLinkClick('/planos')} className="text-slate-400 hover:text-teal-400 text-sm transition-colors">Planos e Preços</button></li>
                         </ul>
                     </div>
 
@@ -58,7 +46,7 @@ export const Footer: React.FC = () => {
                         <h4 className="text-white font-bold mb-6">Institucional</h4>
                         <ul className="space-y-4">
                             <li><button onClick={() => handleLinkClick('/sobre')} className="text-slate-400 hover:text-teal-400 text-sm transition-colors">Sobre Nós</button></li>
-                            <li><button onClick={() => handleLinkClick('/politica-de-privacidade')} className="text-slate-400 hover:text-teal-400 text-sm transition-colors">Privacidade</button></li>
+                            <li><button onClick={() => handleLinkClick('/politica-de-privacidade')} className="text-slate-400 hover:text-teal-400 text-sm transition-colors">Política de Privacidade</button></li>
                             <li><button onClick={() => handleLinkClick('/termos-de-uso')} className="text-slate-400 hover:text-teal-400 text-sm transition-colors">Termos de Uso</button></li>
                         </ul>
                     </div>
@@ -69,7 +57,9 @@ export const Footer: React.FC = () => {
                         <ul className="space-y-4">
                             <li className="flex items-start gap-3">
                                 <Mail className="w-4 h-4 text-teal-400 mt-1" />
-                                <span className="text-slate-400 text-sm">alexandrehenriquefdes@gmail.com</span>
+                                <a href="mailto:suporte@caminhoprofissional.com" className="text-slate-400 hover:text-teal-400 text-sm transition-colors">
+                                    suporte@caminhoprofissional.com
+                                </a>
                             </li>
                         </ul>
                     </div>
