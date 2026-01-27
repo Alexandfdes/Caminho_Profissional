@@ -7,6 +7,7 @@ import { Testimonials } from './Testimonials';
 import { FAQ } from './FAQ';
 import { ChatMock } from './ChatMock';
 import { features } from '../data/content';
+import { Footer } from './Footer';
 
 interface LandingPageProps {
     onStart: () => void;
@@ -255,6 +256,9 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
             {/* FAQ Section */}
             < FAQ />
+
+            {/* Footer */}
+            <Footer />
 
         </div >
     );
