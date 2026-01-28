@@ -1,17 +1,17 @@
 import React from 'react';
-import { FileText, Target, BarChart3, ClipboardList } from 'lucide-react';
+import { Compass, Target, BarChart3, ClipboardList } from 'lucide-react';
 
 const tools = [
-    {
-        icon: FileText,
-        title: 'Análise de CV',
-        description: 'Receba feedback instantâneo da IA sobre seu currículo, com sugestões de melhoria e adequação ao mercado.',
-        color: 'teal'
-    },
     {
         icon: Target,
         title: 'Descoberta de Carreira',
         description: 'Questionário inteligente que mapeia suas aptidões, interesses e valores para encontrar sua vocação.',
+        color: 'teal'
+    },
+    {
+        icon: Compass,
+        title: 'Explorar Carreiras',
+        description: 'Navegue por um catálogo completo de profissões e descubra novas oportunidades alinhadas ao seu perfil.',
         color: 'sky'
     },
     {
