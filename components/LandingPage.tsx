@@ -8,6 +8,7 @@ import { FAQ } from './FAQ';
 import { ChatMock } from './ChatMock';
 import { features } from '../data/content';
 import { Footer } from './Footer';
+import { ToolsSection } from './ToolsSection';
 
 interface LandingPageProps {
     onStart: () => void;
@@ -223,6 +224,9 @@ const LandingPage: React.FC<LandingPageProps> = ({
                     </div>
                 </div>
             </section >
+
+            {/* Tools Section */}
+            <ToolsSection />
 
             {/* Features Section */}
             < section id="features" className="py-32 relative overflow-hidden" >
