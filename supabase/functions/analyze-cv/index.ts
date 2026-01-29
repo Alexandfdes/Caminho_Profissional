@@ -558,40 +558,109 @@ CURRÍCULO:
 <<<
 ${hasText ? cvTextForPrompt : '(O currículo foi enviado como imagens. Extraia as informações visualmente.)'}
 >>>`
-                        : `Você é um especialista em análise de currículos com anos de experiência em recrutamento e desenvolvimento de carreira.
+                        : `Você é um Especialista Sênior em Recrutamento (Headhunter) e Engenheiro de Dados de ATS (Applicant Tracking Systems). Sua missão é processar o currículo realizando duas tarefas críticas simultaneamente: Extração Estruturada e Análise Técnica Profunda.
 
-    ${targetCareer ? `CARGO/ÁREA ALVO: ${targetCareer}` : ''}
+${targetCareer ? `CARGO/ÁREA ALVO: ${targetCareer}` : ''}
 
-Analise o seguinte currículo e retorne UM JSON (apenas JSON puro, sem markdown) com esta estrutura EXATA:
+### TAREFA 1: EXTRAÇÃO E LIMPEZA DE DADOS
+Analise o layout visual do documento. Extraia os dados respeitando a hierarquia visual.
+- **Nome e Cargo:** Se não houver cargo explícito, deduza o mais provável baseado na experiência recente.
+- **Resumo:** Se não existir, gere um resumo profissional de 3 linhas focado nas competências principais.
+- **Experiência:** Separe claramente: "Empresa", "Cargo", "Período" e "Descrição".
+    - Remova quebras de linha manuais dentro de frases. Unifique parágrafos quebrados.
+    - Normalize datas para "Mês Ano - Mês Ano" ou "Mês Ano - Atual".
+- **Habilidades:** Extraia uma lista plana de competências técnicas e comportamentais.
+
+### TAREFA 2: ANÁLISE DE QUALIDADE E FEEDBACK
+Avalie o candidato como um recrutador exigente avaliaria para uma vaga de alto nível.
+- **Score (0-100):** Seja criterioso. 100 é um currículo perfeito, 50 é medíocre.
+- **Red Flags:** Identifique erros de português, datas incoerentes, gaps não explicados, formatação amadora ou falta de contatos.
+- **Pontos Fracos:** Para cada seção, sugira melhorias acionáveis (ex: "Faltam métricas de resultado na experiência X").
+
+### FORMATO DE SAÍDA (JSON OBRIGATÓRIO)
+Retorne APENAS um JSON válido. Não use Markdown. Siga estritamente esta estrutura:
 
 {
-  "overall_score": [número de 0 a 100],
-  "summary": "[resumo geral em português de 2-3 linhas]",
-  "sections": [
+  "score": number,
+  "summary": "Resumo geral da análise do recrutador (2 frases)",
+  "strengths": ["Ponto forte 1", "Ponto forte 2", "Ponto forte 3"],
+  "weaknesses": [
     {
-      "name": "[nome da seção: Experiência Profissional, Formação Acadêmica, Habilidades, etc.]",
-      "score": [número de 0 a 100],
-      "strengths": ["ponto forte 1", "ponto forte 2"],
-      "weaknesses": ["ponto fraco 1", "ponto fraco 2"],
-      "suggestions": ["sugestão 1", "sugestão 2", "sugestão 3"]
+      "section": "Nome da Seção",
+      "issue": "Descrição do problema",
+      "priority": 1,
+      "suggestion": "Sugestão prática de como corrigir"
     }
-  ]
+  ],
+  "red_flags": [
+    {
+      "category": "content",
+      "severity": "high",
+      "issue": "Descrição do erro",
+      "suggestion": "Como resolver"
+    }
+  ],
+  "extracted_contacts": {
+    "email": "",
+    "phone": "",
+    "linkedin": "",
+    "location": ""
+  },
+  "structured_cv": {
+    "personal_info": {
+      "name": "",
+      "role": "",
+      "location": "",
+      "linkedin": "",
+      "phone": "",
+      "email": "",
+      "website": ""
+    },
+    "summary": "",
+    "experience": [
+      {
+        "company": "",
+        "role": "",
+        "period": "",
+        "description": ""
+      }
+    ],
+    "education": [
+      {
+        "institution": "",
+        "degree": "",
+        "period": ""
+      }
+    ],
+    "skills": [],
+    "courses": [
+      {
+        "title": "",
+        "provider": "",
+        "date": ""
+      }
+    ]
+  },
+  "suggestions_by_section": {
+    "Resumo": [],
+    "Experiência": [],
+    "Formação": [],
+    "Habilidades": []
+  }
 }
 
-REGRAS DE FORMATO E TAMANHO:
-- Retorne APENAS JSON válido (RFC 8259), sem comentários, sem markdown, sem texto fora do JSON
-- Use no máximo 6 seções em "sections"
-- Em cada seção: strengths (até 2 itens), weaknesses (até 2 itens), suggestions (até 3 itens)
-- Strings curtas e objetivas (evite parágrafos longos)
+REGRAS:
+- Retorne APENAS JSON válido (RFC 8259), sem comentários, sem markdown
+- Não invente informações. Se não estiver no texto, use "" ou []
+- Seja específico e construtivo nas sugestões
+- Considere padrões do mercado brasileiro
+- priority: 1=Crítico, 2=Médio, 3=Leve
+- severity: "high", "medium" ou "low"
+- category: "content", "format", "gaps" ou "language"
 
 CURRÍCULO A ANALISAR:
 ${hasText ? cvTextForPrompt : '(O currículo foi enviado como imagens. Extraia as informações visualmente.)'}
-
-IMPORTANTE:
-- Retorne APENAS o JSON, sem formatação markdown
-- Seja específico e construtivo
-- Foque em melhorias práticas
-- Considere padrões do mercado brasileiro`;
+`;
 
             const normalizeJsonText = (raw: string) => {
                 // Remove code fences and normalize common quote issues
