@@ -4,6 +4,11 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
+// AI Providers (Strategy Pattern)
+import { callGemini } from './providers/gemini.ts'
+import { callOpenAI } from './providers/openai.ts'
+import type { AIProvider } from './providers/types.ts'
+
 // ========= ENV VARS (mantidas do seu código) =========
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY') ?? Deno.env.get('GEMINIAPIKEY')
 const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY')
@@ -215,157 +220,12 @@ Deno.serve(async (req) => {
                 })
             }
 
-            const callGemini = async (
-                prompt: string,
-                opts?: { temperature?: number; maxOutputTokens?: number; images?: string[] }
-            ) => {
-                const temperature = opts?.temperature ?? 0.4;
-                const maxOutputTokens = opts?.maxOutputTokens ?? 3072;
+            // ========= AI PROVIDER SELECTION (Strategy Pattern) =========
+            // Priority: 1) body.provider, 2) DEFAULT_AI_PROVIDER env, 3) 'gemini' default
+            const providerName = String(body?.provider ?? Deno.env.get('DEFAULT_AI_PROVIDER') ?? 'gemini').toLowerCase();
+            const callAI: AIProvider = providerName === 'openai' ? callOpenAI : callGemini;
+            console.log(`>>> Using AI provider: ${providerName}`);
 
-                const imageList = Array.isArray(opts?.images) ? opts!.images! : [];
-                const parts: any[] = [{ text: prompt }];
-                for (const img of imageList.slice(0, 3)) {
-                    if (typeof img === 'string' && img.trim()) {
-                        parts.push({ inlineData: { mimeType: 'image/jpeg', data: img } });
-                    }
-                }
-
-                const geminiResponse = await fetch(
-                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts }],
-                            generationConfig: {
-                                temperature,
-                                maxOutputTokens,
-                                // Hint the API to return JSON-only when supported.
-                                responseMimeType: 'application/json',
-                            }
-                        })
-                    }
-                );
-
-                if (!geminiResponse.ok) {
-                    const errorData = await geminiResponse.text();
-                    console.error('Gemini API error:', errorData);
-                    throw new Error('Erro ao comunicar com a IA');
-                }
-
-                const geminiData = await geminiResponse.json();
-
-                const blockReason = geminiData?.promptFeedback?.blockReason;
-                if (blockReason) {
-                    console.error('Gemini blocked response:', blockReason);
-                    throw new Error(`IA bloqueou a resposta (blockReason=${String(blockReason)})`);
-                }
-
-                const responseParts = geminiData?.candidates?.[0]?.content?.parts;
-                const responseText = Array.isArray(responseParts)
-                    ? responseParts.map((p: any) => p?.text).filter(Boolean).join('\n')
-                    : responseParts?.[0]?.text;
-
-                if (!responseText) {
-                    throw new Error('Resposta vazia da IA');
-                }
-
-                return responseText;
-            };
-
-            // OpenAI GPT-4/5 function (alternative to Gemini)
-            const callOpenAI = async (
-                prompt: string,
-                opts?: { temperature?: number; maxTokens?: number; images?: string[] }
-            ) => {
-                if (!OPENAI_API_KEY) {
-                    throw new Error('OPENAI_API_KEY não configurada');
-                }
-
-                const temperature = opts?.temperature ?? 0.3;
-                const maxTokens = opts?.maxTokens ?? 4096;
-                const imageList = Array.isArray(opts?.images) ? opts!.images! : [];
-
-                // Build messages with images if provided
-                const content: any[] = [{ type: 'text', text: prompt }];
-                for (const img of imageList.slice(0, 3)) {
-                    if (typeof img === 'string' && img.trim()) {
-                        content.push({
-                            type: 'image_url',
-                            image_url: { url: `data:image/jpeg;base64,${img}` }
-                        });
-                    }
-                }
-
-                console.log('>>> callOpenAI: About to fetch, content items:', content.length);
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${OPENAI_API_KEY}`
-                    },
-                    body: JSON.stringify({
-                        model: 'gpt-5-mini',
-                        messages: [
-                            {
-                                role: 'system',
-                                content: 'Você é um extrator de currículos especializado. Retorne APENAS JSON válido, sem markdown, sem comentários, sem texto adicional.'
-                            },
-                            { role: 'user', content }
-                        ],
-                        // temperature is NOT supported with reasoning_effort types other than 'none'
-                        // temperature, 
-                        max_completion_tokens: maxTokens,
-                        reasoning_effort: 'low',
-                        // verbosity removed as it's not standard
-                        response_format: { type: 'json_object' }
-                    })
-                });
-                console.log('>>> callOpenAI: Fetch completed, status:', response.status);
-
-                if (!response.ok) {
-                    const errorData = await response.text();
-                    console.error('OpenAI API error status:', response.status);
-                    console.error('OpenAI API error body:', errorData);
-                    throw new Error(`Erro ao comunicar com OpenAI: ${response.status} - ${errorData.substring(0, 200)}`);
-                }
-
-                const data = await response.json();
-                console.log('>>> callOpenAI: JSON parsed, keys:', Object.keys(data));
-
-                // GPT-5.2 can return in multiple formats
-                let responseText = '';
-
-                // Format 1: Standard chat completions (choices array)
-                if (data?.choices?.[0]?.message?.content) {
-                    responseText = data.choices[0].message.content;
-                }
-                // Format 2: New responses API format (output array)
-                else if (data?.output?.[0]?.content?.[0]?.text) {
-                    responseText = data.output[0].content[0].text;
-                }
-                // Format 3: Direct text field
-                else if (data?.text) {
-                    responseText = data.text;
-                }
-                // Format 4: output_text field (seen in test)
-                else if (data?.output_text) {
-                    responseText = data.output_text;
-                }
-
-                if (!responseText) {
-                    console.error('OpenAI response format not recognized:', JSON.stringify(data).substring(0, 800));
-                    throw new Error('Resposta vazia da OpenAI - formato não reconhecido');
-                }
-
-                console.log('OpenAI response text length:', responseText.length);
-                return responseText;
-            };
-
-            // Use Gemini 3 Flash for autofill (better structured JSON extraction)
-            const callAI = callGemini;
-            // To use OpenAI instead, uncomment the line below and comment out the line above:
-            // const callAI = callOpenAI;
 
             const buildAutofillPrompt = (cvText: string) => `
 Você é um importador de currículos que:
