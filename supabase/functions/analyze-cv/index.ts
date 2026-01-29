@@ -215,7 +215,6 @@ Deno.serve(async (req) => {
                 })
             }
 
-            /*
             const callGemini = async (
                 prompt: string,
                 opts?: { temperature?: number; maxOutputTokens?: number; images?: string[] }
@@ -273,7 +272,6 @@ Deno.serve(async (req) => {
 
                 return responseText;
             };
-            */
 
             // OpenAI GPT-4/5 function (alternative to Gemini)
             const callOpenAI = async (
@@ -364,10 +362,10 @@ Deno.serve(async (req) => {
                 return responseText;
             };
 
-            // Use OpenAI GPT-5.2
-            const callAI = callOpenAI;
-            // To use Gemini instead, uncomment the line below and comment out the line above:
-            // const callAI = callGemini;
+            // Use Gemini 3 Flash for autofill (better structured JSON extraction)
+            const callAI = callGemini;
+            // To use OpenAI instead, uncomment the line below and comment out the line above:
+            // const callAI = callOpenAI;
 
             const buildAutofillPrompt = (cvText: string) => `
 Você é um importador de currículos que:
