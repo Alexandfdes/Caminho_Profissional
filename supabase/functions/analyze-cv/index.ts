@@ -221,8 +221,8 @@ Deno.serve(async (req) => {
             }
 
             // ========= AI PROVIDER SELECTION (Strategy Pattern) =========
-            // Priority: 1) body.provider, 2) DEFAULT_AI_PROVIDER env, 3) 'gemini' default
-            const providerName = String(body?.provider ?? Deno.env.get('DEFAULT_AI_PROVIDER') ?? 'gemini').toLowerCase();
+            // Priority: 1) body.provider, 2) DEFAULT_AI_PROVIDER env, 3) 'openai' default
+            const providerName = String(body?.provider ?? Deno.env.get('DEFAULT_AI_PROVIDER') ?? 'openai').toLowerCase();
             const callAI: AIProvider = providerName === 'openai' ? callOpenAI : callGemini;
             console.log(`>>> Using AI provider: ${providerName}`);
 
