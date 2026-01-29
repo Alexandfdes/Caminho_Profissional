@@ -618,14 +618,6 @@ export const CVEditorStep: React.FC<CVEditorStepProps> = ({ analysis, onBack, us
                             <span>{isUploading ? 'Enviando...' : 'Upload/Importar'}</span>
                         </button>
 
-                        <button
-                            type="button"
-                            onClick={() => setIsAssistantOpen(true)}
-                            className="group relative flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold border border-[color:var(--cv-border-weak)] bg-[var(--cv-surface-a85)] hover:bg-[color:var(--cv-surface)] text-[color:var(--cv-text)] shadow-[var(--cv-shadow-1)] transition-colors active:scale-95"
-                        >
-                            <MessageCircle className="w-4 h-4 text-[color:var(--cv-accent)]" />
-                            <span>Assistente IA</span>
-                        </button>
 
                         <button
                             onClick={() => handlePrint()}
