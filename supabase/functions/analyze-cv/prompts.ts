@@ -24,24 +24,27 @@ ANÁLISE MULTIMODAL (VISUAL):
 REGRAS DE EXTRAÇÃO:
 - **Separação**: Cada experiência e cada formação deve ser um objeto distinto. Não agrupe.
 - **Datas**: Tente padronizar para "MMM AAAA" (ex: "jan 2023"). Se for "Atualmente", use "Atual".
-- **Contato**: Telefone deve conter apenas dígitos ou formato internacional (+55).
+- **Telefone**: APENAS DÍGITOS (ex: "5584999999999"). Remova parênteses, hífens, espaços.
 - **Resumo**: Se não houver seção "Resumo" ou "Sobre", deixe em branco ou gere uma frase descritiva baseada no último cargo.
 - **Habilidades**: Liste como strings simples.
+- **Links**: Sempre adicione "https://" no início (ex: "https://linkedin.com/in/user").
 
 SCHEMA DE RESPOSTA (JSON OBRIGATÓRIO):
 Retorne APENAS um JSON válido com esta estrutura exata:
 
 {
+  "ok": true,
+  "applyMode": "replace",
   "patch": {
     "personal": {
       "fullName": "Nome Completo encontrado",
       "role": "Cargo atual ou título do CV",
       "email": "email@exemplo.com",
-      "phone": "(XX) 9XXXX-XXXX",
+      "phone": "5584999999999",
       "location": "Cidade, Estado",
-      "linkedin": "linkedin.com/in/usuario",
-      "website": "portfolio.com",
-      "github": "github.com/usuario"
+      "linkedin": "https://linkedin.com/in/usuario",
+      "website": "https://portfolio.com",
+      "github": "https://github.com/usuario"
     },
     "summaryHtml": "Texto do resumo (sem tags HTML complexas, apenas texto limpo)",
     "skills": ["Skill 1", "Skill 2", "Skill 3"],
@@ -71,15 +74,19 @@ Retorne APENAS um JSON válido com esta estrutura exata:
       {
         "title": "Nome do Projeto",
         "descriptionHtml": "Descrição breve",
-        "url": "Link do projeto",
+        "url": "https://link-do-projeto.com",
         "tech": ["Tech 1", "Tech 2"]
       }
     ]
   },
   "confidence": {
     "personal": 100,
+    "summary": 100,
+    "skills": 100,
     "experience": 100,
-    "education": 100
+    "education": 100,
+    "courses": 100,
+    "projects": 100
   }
 }
 
