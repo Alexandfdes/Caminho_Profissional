@@ -16,13 +16,15 @@ export const callOpenAI = async (
     const maxTokens = opts?.maxOutputTokens ?? 4096;
     const imageList = Array.isArray(opts?.images) ? opts.images : [];
 
-    // Build messages with images if provided
+    // Build messages with images if provided (GPT-5 Mini supports up to 5 images)
     const content: unknown[] = [{ type: 'text', text: prompt }];
-    for (const img of imageList.slice(0, 3)) {
+    for (const img of imageList.slice(0, 5)) {
         if (typeof img === 'string' && img.trim()) {
+            // Ensure proper data URL format
+            const url = img.startsWith('data:') ? img : `data:image/jpeg;base64,${img}`;
             content.push({
                 type: 'image_url',
-                image_url: { url: `data:image/jpeg;base64,${img}` }
+                image_url: { url, detail: 'high' } // 'high' detail for better OCR accuracy
             });
         }
     }

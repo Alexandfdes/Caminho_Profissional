@@ -19,9 +19,12 @@ export const callGemini = async (
     const imageList = Array.isArray(opts?.images) ? opts.images : [];
     const parts: unknown[] = [{ text: prompt }];
 
-    for (const img of imageList.slice(0, 3)) {
+    // Gemini expects pure base64 without the data URL header
+    for (const img of imageList.slice(0, 5)) {
         if (typeof img === 'string' && img.trim()) {
-            parts.push({ inlineData: { mimeType: 'image/jpeg', data: img } });
+            // Strip data URL header if present (e.g., "data:image/jpeg;base64,")
+            const base64Data = img.includes('base64,') ? img.split('base64,')[1] : img;
+            parts.push({ inlineData: { mimeType: 'image/jpeg', data: base64Data } });
         }
     }
 
