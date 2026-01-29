@@ -104,10 +104,6 @@ export const faq = [
         answer: 'A descoberta inicial é gratuita. Para acessar recursos completos como o Plano de Ação detalhado, Comparador de Carreiras e conteúdo exclusivo, oferecemos planos acessíveis. Você pode cancelar a qualquer momento, sem multas.'
     },
     {
-        question: 'Como é feito o pagamento?',
-        answer: 'Utilizamos o Mercado Pago como plataforma de pagamento, garantindo segurança e praticidade. Aceitamos cartões de crédito, débito, Pix e boleto bancário.'
-    },
-    {
         question: 'Posso refazer a análise de carreira?',
         answer: 'Sim! Entendemos que as pessoas evoluem. Você pode refazer a Descoberta de Carreira quantas vezes quiser para ver como seus interesses mudaram ao longo do tempo.'
     },
