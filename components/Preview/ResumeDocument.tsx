@@ -203,31 +203,64 @@ const formatLink = (url?: string) => {
 
 const HtmlText = ({ html }: { html: string }) => {
     if (!html) return null;
-    const clean = html
-        .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<\/p>/gi, '\n')
-        .replace(/<li[^>]*>/gi, '• ')
-        .replace(/<\/li>/gi, '\n')
-        .replace(/<[^>]+>/g, '')
-        .replace(/&nbsp;/g, ' ')
-        .replace(/\n\s*\n/g, '\n')
-        .trim();
 
-    if (!clean) return null;
-    return (
-        <View>
-            {clean.split('\n').map((line, i) => {
-                const trimmed = line.trim();
-                if (!trimmed) return null;
-                const isUrl = trimmed.startsWith('http');
-                return (
-                    <Text key={i} style={styles.description}>
-                        {(trimmed.startsWith('-') || trimmed.startsWith('•') || isUrl) ? trimmed : `• ${trimmed}`}
-                    </Text>
-                );
-            })}
-        </View>
-    );
+    // 1. Limpeza inicial
+    let clean = html
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/&nbsp;/g, ' ');
+
+    // 2. Se não tiver tags HTML, retorna texto simples
+    if (!/<[a-z][\s\S]*>/i.test(clean)) {
+        const lines = clean.split('\n').filter(l => l.trim());
+        return (
+            <View>
+                {lines.map((line, i) => (
+                    <Text key={i} style={styles.description}>{line.trim()}</Text>
+                ))}
+            </View>
+        );
+    }
+
+    // 3. Processamento de Listas (<ul>, <ol>, <li>)
+    if (clean.includes('<li>') || clean.includes('<li ')) {
+        const listItems = clean.match(/<li[^>]*>([\s\S]*?)<\/li>/gi);
+        if (listItems && listItems.length > 0) {
+            return (
+                <View>
+                    {listItems.map((item, i) => {
+                        const content = item
+                            .replace(/<\/?li[^>]*>/gi, '')
+                            .replace(/<[^>]+>/g, '')
+                            .trim();
+                        if (!content) return null;
+                        return (
+                            <Text key={i} style={styles.description}>• {content}</Text>
+                        );
+                    })}
+                </View>
+            );
+        }
+    }
+
+    // 4. Processamento de Parágrafos (<p>)
+    const paragraphs = clean
+        .split(/<\/p>/i)
+        .map(p => p.replace(/<p[^>]*>/gi, '').replace(/<[^>]+>/g, '').trim())
+        .filter(Boolean);
+
+    if (paragraphs.length > 0) {
+        return (
+            <View>
+                {paragraphs.map((text, i) => (
+                    <Text key={i} style={[styles.description, { marginBottom: 2 }]}>{text}</Text>
+                ))}
+            </View>
+        );
+    }
+
+    // 5. Fallback - remove todas as tags e retorna
+    const fallbackText = clean.replace(/<[^>]+>/g, '').trim();
+    return fallbackText ? <Text style={styles.description}>{fallbackText}</Text> : null;
 };
 
 // --- 5. COMPONENTE DOCUMENTO ---
