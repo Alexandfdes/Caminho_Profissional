@@ -186,7 +186,7 @@ serve(async (req) => {
     const prompt = String(body?.prompt ?? "");
     const requestType = String(body?.requestType ?? "unknown");
 
-    const modelRaw = String(body?.model ?? "gemini-3-flash-preview").toLowerCase();
+    const modelRaw = String(body?.model ?? "gemini-2.5-flash").toLowerCase();
     // Map "gpt 5 mini" user request to a real model if needed, but better to rely on frontend sending the right string.
     // If frontend sends "gpt-4o-mini", we use it. 
     const model = modelRaw;
