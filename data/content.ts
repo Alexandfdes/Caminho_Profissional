@@ -80,33 +80,44 @@ export const testimonials = [
 
 export const faq = [
     {
-        question: 'Como funciona a análise de perfil?',
-        answer: 'Nossa IA realiza uma entrevista interativa com você, analisando suas respostas para identificar padrões de comportamento, interesses e aptidões, cruzando com dados de milhares de carreiras.'
-    },
-
-    {
-        question: 'Quanto tempo leva para concluir a análise?',
-        answer: 'O processo é dinâmico e depende do seu ritmo, mas geralmente leva entre 10 a 15 minutos. Nossa IA adapta as perguntas conforme suas respostas para ser o mais objetiva possível.'
+        question: 'O que é o CaminhoProfissionaIA?',
+        answer: 'É uma plataforma de orientação profissional que utiliza Inteligência Artificial para ajudar você a descobrir sua vocação, explorar carreiras e criar um plano de ação personalizado para alcançar seus objetivos profissionais.'
     },
     {
-        question: 'Como a IA garante a precisão dos resultados?',
-        answer: 'Utilizamos modelos avançados de linguagem treinados em milhares de trajetórias profissionais reais. A IA cruza seu perfil comportamental com dados atualizados de mercado para encontrar o "match" ideal.'
+        question: 'Como funciona a Descoberta de Carreira?',
+        answer: 'Nossa IA realiza uma entrevista interativa com você, analisando suas respostas para identificar padrões de comportamento, interesses e aptidões. O processo leva entre 10 a 15 minutos e as perguntas são adaptadas conforme suas respostas.'
+    },
+    {
+        question: 'O que é o Explorar Carreiras?',
+        answer: 'É um catálogo completo de profissões onde você pode navegar, filtrar por área de interesse e descobrir novas oportunidades. Cada carreira inclui informações sobre salário médio, mercado de trabalho e habilidades necessárias.'
+    },
+    {
+        question: 'Como funciona o Comparador de Carreiras?',
+        answer: 'O comparador permite que você selecione até 3 carreiras e veja uma análise lado a lado com dados sobre salário médio, perspectiva de crescimento, demanda de mercado e nível de satisfação profissional.'
     },
     {
         question: 'O que está incluído no Plano de Ação?',
-        answer: 'Você receberá um roteiro passo a passo com sugestões de cursos, certificações, projetos práticos para construir portfólio e estratégias de networking específicas para a carreira sugerida.'
+        answer: 'Você recebe um roteiro passo a passo personalizado com: cursos recomendados, certificações importantes, projetos práticos para construir portfólio, estratégias de networking e um cronograma realista para sua transição de carreira.'
     },
     {
-        question: 'Posso cancelar a assinatura a qualquer momento?',
-        answer: 'Sim! Se você optar pelo plano de assinatura, pode cancelar quando quiser através do seu painel de usuário, sem multas ou fidelidade.'
+        question: 'Preciso pagar para usar a plataforma?',
+        answer: 'A descoberta inicial é gratuita. Para acessar recursos completos como o Plano de Ação detalhado, Comparador de Carreiras e conteúdo exclusivo, oferecemos planos acessíveis. Você pode cancelar a qualquer momento, sem multas.'
     },
     {
-        question: 'Os dados de mercado são atualizados?',
-        answer: 'Sim, nossa base de dados é atualizada constantemente com informações de vagas reais e relatórios de tendências de mercado.'
+        question: 'Como é feito o pagamento?',
+        answer: 'Utilizamos o Mercado Pago como plataforma de pagamento, garantindo segurança e praticidade. Aceitamos cartões de crédito, débito, Pix e boleto bancário.'
     },
     {
-        question: 'Posso refazer o teste?',
-        answer: 'Com certeza. Entendemos que as pessoas mudam. Você pode refazer a análise a qualquer momento para ver se seus interesses evoluíram.'
+        question: 'Posso refazer a análise de carreira?',
+        answer: 'Sim! Entendemos que as pessoas evoluem. Você pode refazer a Descoberta de Carreira quantas vezes quiser para ver como seus interesses mudaram ao longo do tempo.'
+    },
+    {
+        question: 'Meus dados estão seguros?',
+        answer: 'Absolutamente. Seguimos a LGPD (Lei Geral de Proteção de Dados) e utilizamos criptografia para proteger suas informações. Seus dados nunca são vendidos a terceiros. Consulte nossa Política de Privacidade para mais detalhes.'
+    },
+    {
+        question: 'A IA realmente funciona para orientação profissional?',
+        answer: 'Sim! Nossa IA é treinada com dados de milhares de perfis profissionais reais e tendências de mercado atualizadas. Ela identifica padrões que humanos podem não perceber, oferecendo sugestões personalizadas e baseadas em dados concretos.'
     }
 ];
 
