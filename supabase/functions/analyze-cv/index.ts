@@ -9,6 +9,9 @@ import { callGemini } from './providers/gemini.ts'
 import { callOpenAI } from './providers/openai.ts'
 import type { AIProvider } from './providers/types.ts'
 
+// Prompt Templates (externalized for maintainability)
+import { buildAutofillPrompt } from './prompts.ts'
+
 // ========= ENV VARS (mantidas do seu código) =========
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY') ?? Deno.env.get('GEMINIAPIKEY')
 const OPENAI_API_KEY = Deno.env.get('OPENAI_API_KEY')
@@ -226,165 +229,7 @@ Deno.serve(async (req) => {
             const callAI: AIProvider = providerName === 'openai' ? callOpenAI : callGemini;
             console.log(`>>> Using AI provider: ${providerName}`);
 
-
-            const buildAutofillPrompt = (cvText: string) => `
-Você é um importador de currículos que:
-1) Lê o currículo (texto e, quando necessário, contexto das imagens das páginas).
-2) Interpreta entidades de currículo (nome, contatos, links, cargos, empresas, datas, formações, competências, etc.).
-3) Normaliza datas, cargos, empresas e níveis de escolaridade.
-4) Retorna os dados **exatamente** no JSON especificado adiante.
-5) Gera um **preview textual** seguindo o **layout e estilo** abaixo (sem HTML, apenas texto com quebras de linha), com as mesmas seções e ordem.
-
-ANÁLISE MULTIMODAL:
-- SE imagens do PDF forem fornecidas, USE-AS como fonte PRIMÁRIA para entender o layout e estrutura visual do currículo.
-- O texto bruto pode ter problemas de extração (texto junto, ordem errada). As imagens mostram a formatação real.
-- Compare texto e imagem: confie mais na imagem para entender ONDE cada informação está posicionada.
-- Identifique seções visuais (cabeçalhos, colunas, divisões) pela imagem para separar corretamente os dados.
-
-REGRAS CRÍTICAS DE SEPARAÇÃO:
-- **EXPERIÊNCIA**: CADA emprego/cargo diferente DEVE ser um objeto SEPARADO no array "experiencia". 
-  Se a pessoa trabalhou em 2 empresas, devem existir 2 objetos. Se trabalhou 3 vezes, 3 objetos.
-  Identifique mudanças de empresa/cargo analisando: nomes de empresas, cargos diferentes, ou datas que não se sobrepõem.
-- **FORMAÇÃO**: CADA curso/formação diferente DEVE ser um objeto SEPARADO no array "formacao".
-  Se a pessoa tem ensino médio + graduação, devem existir 2 objetos. Mestrado = +1 objeto.
-  Identifique formações diferentes por: tipo (ensino médio, graduação, pós), instituições diferentes, ou cursos diferentes.
-- NÃO junte múltiplas experiências ou formações em um único objeto. Mesmo que o texto original esteja "colado", separe cada item.
-
-REGRAS CRÍTICAS DE REDIRECIONAMENTO DE LINKS:
-- **GITHUB**: O campo específico de GitHub foi removido. Se você encontrar um link de GitHub (ex: github.com/usuario), COLOQUE-O no campo \`portfolio\` ou \`site\`.
-- **OUTROS LINKS**: Quaisquer outros links relevantes (Behance, Dribbble, Medium, etc.) devem ser colocados no campo \`portfolio\`.
-
-IMPORTANTE:
-- NÃO invente dados. Se faltar algo, deixe vazio ou omita o campo, conforme o schema.
-- Conserte pequenos problemas comuns: emails com espaços, telefones com símbolos, datas abreviadas ou “present/atual”.
-- Padronize **idioma PT-BR** (ex.: mai, jun, set; “Cursando, previsão de conclusão em AAAA”).
-- Use **capitalização consistente** para nomes próprios e cargos (Título de Seção com Primeira Letra Maiúscula; conteúdo normal).
-- Remova duplicatas entre Experiência e Projetos/Atividades, mantendo a versão mais completa.
-- Links: sempre normalize (\`https://...\`) sem espaços.
-- Telefone: se possível, normalize para \`(84) 9 - NNNNNNN\` (com espaços ao redor do hífen, como no preview).
-- Nunca retorne texto fora dos campos especificados.
-
-[CONTEXT]
-PDF_TEXT_BRUTO:
-${cvText}
-
-[TAREFA]
-1) Extraia e normalize os dados do currículo e retorne no JSON no campo \`data\`.
-2) Gere o **preview** de exibição no campo \`preview_text\`, com a formatação a seguir.
-
-[ESQUEMA JSON DE SAÍDA]
-Retorne **apenas** um JSON com esta estrutura:
-
-{
-  "data": {
-      "nome": "string (Primeiro nome)",
-      "sobrenome": "string (Resto do nome completo)",
-      "email": "string",
-      "telefone": "string",
-      "cidade": "string",
-      "estado": "string (UF)",
-      "endereco": "string (Rua, nº, bairro)",
-      "cep": "string",
-      "links": {
-        "site": "string",
-        "linkedin": "string",
-        "portfolio": "string"
-      },
-      "data_nascimento": "DD/MM/AAAA",
-      "nacionalidade": "string",
-      "genero": "string",
-      "estado_civil": "string",
-      "habilitacao": "string (Ex: AB, B, D)"
-    },
-    "resumo": "string", 
-    "competencias": [ "string" ],
-    "idiomas": [ { "idioma": "string", "nivel": "string" } ],
-    "formacao": [
-      {
-        "curso": "string",
-        "instituicao": "string",
-        "nivel": "string", 
-        "inicio": "AAAA-MM | string",
-        "fim": "AAAA-MM | string",
-        "situacao": "concluído | cursando | trancado | incompleto | string",
-        "observacao": "ex.: \"Cursando, previsão de conclusão em AAAA\""
-      }
-    ],
-    "experiencia": [
-      {
-        "cargo": "string",
-        "empresa": "string",
-        "inicio": "AAAA-MM",
-        "fim": "AAAA-MM | \"atual\"",
-        "local": "string",
-        "descricao": [
-          "bullet 1"
-        ],
-        "tipo": "tempo integral | estágio | freelancer | string"
-      }
-    ],
-    "cursos": [
-      {
-        "titulo": "string",
-        "instituicao": "string",
-        "ano": "AAAA | string",
-        "carga_horaria": "string"
-      }
-    ],
-    "projetos": [
-      {
-        "titulo": "string",
-        "link": "string",
-        "descricao": "string",
-        "stack": [ "string" ]
-      }
-    ],
-    "certificados": [
-      { "titulo": "string", "instituicao": "string", "ano": "AAAA | string" }
-    ],
-    "interesses": [ "string" ],
-    "qualidades": [ "string" ],
-    "referencias": [
-      { "nome": "string", "contato": "string", "observacao": "string" }
-    ]
-  },
-
-  "preview_text": "string grande com quebras de linha seguindo o layout abaixo"
-}
-
-[REGRAS DE NORMALIZAÇÃO]
-- Datas:
-  - Converter meses para abreviações PT-BR: jan, fev, mar, abr, mai, jun, jul, ago, set, out, nov, dez.
-  - Períodos: "mai 2024 - set 2025" (espaços ao redor do hífen).
-  - Se atual, usar: "mai 2024 - atual".
-- Telefone: se possível, formato “(DD) 9 - NNNNNNN”.
-- URLs: remover espaços, forçar https:// quando aplicável.
-- Texto: remover lixo de OCR e espaços extras; preservar acentuação.
-
-[LAYOUT DO PREVIEW — EXATAMENTE NESTA ORDEM E ESTILO]
-- Primeira linha: Nome completo (todas as partes, com espaços simples).
-- Seção "Dados pessoais"
-  - Nome completo (repetir)
-  - email com espaços “protetores” (ex.: \`nome @ dominio . com\`)
-  - telefone como “( 84 )  9  -  96658951” (espaços ao redor do hífen; espaços simples entre tokens)
-  - “Cidade :  Mossoró  -  RN  Mossoró” quando houver cidade/estado; se houver endereço/CEP, não exibir no preview, apenas cidade/estado.
-  - links em linhas separadas (ex.: \`github . com/usuario\`, \`linkedin . com/in/slug\`)
-- Seção "Competências"
-  - Listar em linhas, uma por linha, mantendo capitalização simples (Java, Spring Boot, MySQL…)
-- Seção "Formação"
-  - Um item por bloco: 
-    - linha 1: nível/descrição (ex.: “Ensino médio completo  2024  DIOCESANO SANTA LUZIA”)
-    - linha 2 (se estiver cursando): “Ciência da Computação  2028  Universidade Potiguar (UNP)  Cursando, previsão de conclusão em 2028”
-- Seção "Experiência"
-  - Cabeçalho do cargo (uma linha): “Desenvolvedor  mai 2024  -  set 2025  F. souto”
-  - Descrição em parágrafos curtos ou bullets concatenados em linhas (sem marcadores de “-” ou “•”, apenas frases por linha).
-- Seção "Cursos"
-  - Uma linha por curso, com “Baixe seu currículo em www.cvwizard.com” se for aplicável (apenas se constar no currículo; não inventar).
-
-[VALIDAÇÃO]
-- Retorne **apenas** o JSON final (sem comentários e sem markdown block quotes).
-`;
-
+            // buildAutofillPrompt is imported from prompts.ts
             const effectiveCvTextForPrompt = cvTextForPrompt;
 
             const prompt =
