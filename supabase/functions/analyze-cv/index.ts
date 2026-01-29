@@ -1009,10 +1009,16 @@ ${hasText ? cvTextForPrompt : '(O currículo foi enviado como imagens. Extraia a
                     const rawApplyMode = asString((candidate as any)?.applyMode);
                     if (rawApplyMode && rawApplyMode !== 'replace') warnings.push(`applyMode inesperado: ${rawApplyMode}; forçado para replace.`);
 
+                    const experienceRaw = asArray(patchSource?.experiencia || patchSource?.experience);
+                    const educationRaw = asArray(patchSource?.formacao || patchSource?.education);
+                    const coursesRaw = asArray(patchSource?.cursos || patchSource?.training);
+                    const projectsRaw = asArray(patchSource?.projetos || patchSource?.projects);
+                    const skillsRaw = asArray(patchSource?.competencias || patchSource?.skills);
+
                     const patch = {
                         personal: {
                             ...ensurePersonalKeys({
-                                fullName: asString(personal?.fullName),
+                                fullName: asString(personal?.fullName || personal?.name),
                                 role,
                                 email,
                                 phone,
@@ -1026,11 +1032,43 @@ ${hasText ? cvTextForPrompt : '(O currículo foi enviado como imagens. Extraia a
                             website: normalizeLink(personal?.website),
                         },
                         summaryHtml,
-                        skills: cleanSkills(asArray(patchSource?.skills)),
-                        experience: experience.slice(0, 12),
-                        education: education.slice(0, 12),
-                        courses: courses.slice(0, 20),
-                        projects: projects.slice(0, 12),
+                        skills: cleanSkills(skillsRaw),
+                        experience: asArray(experienceRaw)
+                            .map((x: any) => ({
+                                title: asString(x?.cargo || x?.role || x?.title),
+                                subtitle: asString(x?.empresa || x?.company || x?.subtitle),
+                                date: asString(x?.inicio && x?.fim ? `${x.inicio} - ${x.fim}` : (x?.date || x?.period)),
+                                descriptionHtml: sanitizeHtmlAllowlist(asString(Array.isArray(x?.descricao) ? x.descricao.join('\n') : (x?.descricao || x?.description || x?.descriptionHtml)) || '<ul><li></li></ul>'),
+                            }))
+                            .filter((x: any) => x.title)
+                            .slice(0, 12),
+                        education: asArray(educationRaw)
+                            .map((x: any) => ({
+                                title: asString(x?.curso || x?.degree || x?.title),
+                                subtitle: asString(x?.instituicao || x?.institution || x?.subtitle),
+                                date: asString(x?.inicio && x?.fim ? `${x.inicio} - ${x.fim}` : (x?.date || x?.period)),
+                                descriptionHtml: sanitizeHtmlAllowlist(asString(x?.observacao || x?.description || x?.descriptionHtml) || '<p></p>'),
+                            }))
+                            .filter((x: any) => x.title)
+                            .slice(0, 12),
+                        courses: asArray(coursesRaw)
+                            .map((x: any) => ({
+                                title: asString(x?.titulo || x?.title),
+                                provider: asString(x?.instituicao || x?.provider || x?.institution),
+                                date: asString(x?.ano || x?.date),
+                            }))
+                            .filter((x: any) => x.title)
+                            .slice(0, 20),
+                        projects: asArray(projectsRaw)
+                            .map((x: any) => ({
+                                title: asString(x?.titulo || x?.title),
+                                url: normalizeLink(x?.link || x?.url),
+                                date: asString(x?.date),
+                                descriptionHtml: sanitizeHtmlAllowlist(asString(x?.descricao || x?.description || x?.descriptionHtml) || '<p></p>'),
+                                tech: asArray(x?.stack || x?.tech).map((t: any) => asString(t)).filter(Boolean).slice(0, 12),
+                            }))
+                            .filter((x: any) => x.title)
+                            .slice(0, 12),
                     };
 
                     const confidence = {

@@ -1,7 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { extractTextFromCV, parseResumeText, CVData, Experience, Education } from '../../utils/cvParser';
+import { CVData, Experience, Education, extractTextFromDOCX } from '../../utils/cvParser';
 import { Loader2, Upload, AlertCircle, CheckCircle2, Plus, Trash2 } from 'lucide-react';
+import { autofillCVWithAI } from '../../services/geminiService';
+import { pdfParserService } from '../../services/pdfParserService';
 
 interface CVImportFormProps {
     data: CVData;
@@ -13,6 +15,20 @@ export const CVImportForm: React.FC<CVImportFormProps> = ({ data, onUpdate }) =>
     const [error, setError] = useState<string | null>(null);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
+    const stripHtml = (html: string) => {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+    };
+
+    const parseDateRange = (dateStr: string) => {
+        if (!dateStr) return { inicio: '', fim: '' };
+        const parts = dateStr.split(/\s+[-–—]\s+/);
+        return {
+            inicio: parts[0]?.trim() || '',
+            fim: parts[1]?.trim() || ''
+        };
+    };
+
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         const file = acceptedFiles[0];
         if (!file) return;
@@ -22,23 +38,76 @@ export const CVImportForm: React.FC<CVImportFormProps> = ({ data, onUpdate }) =>
         setSuccessMsg(null);
 
         try {
-            const text = await extractTextFromCV(file);
-            if (!text || text.length < 50) {
-                throw new Error('Não foi possível extrair texto suficiente do arquivo.');
+            let extractedText = '';
+            let images: string[] | undefined = undefined;
+            const fileName = file.name.toLowerCase();
+
+            // 1. Extraction based on format
+            if (fileName.endsWith('.docx')) {
+                extractedText = await extractTextFromDOCX(file);
+            } else if (fileName.endsWith('.pdf')) {
+                extractedText = await pdfParserService.extractTextFromPDF(file);
+
+                // 2. Fallback for scanned PDFs (image-only)
+                if (!extractedText || extractedText.trim().length < 100) {
+                    console.log('🔍 [CVImportForm] Texto insuficiente detetado no PDF. Tentando OCR (Visual)...');
+                    images = await pdfParserService.convertPDFToImages(file, 3);
+                }
+            } else {
+                throw new Error('Formato de arquivo não suportado. Use PDF ou DOCX.');
             }
 
-            const parsedData = parseResumeText(text);
+            // 3. Call AI Service
+            const result = await autofillCVWithAI({
+                text: extractedText,
+                images: images,
+                filename: file.name
+            });
 
-            // Merge with existing data only if fields are empty to avoid overwriting user edits? 
-            // Or just overwrite as it's an import action? 
-            // Requirement says: "Preencher formulário com JSON (sem sobrescrever o que o usuário já digitou)"
-            // But usually import implies "load this". Let's do a smart merge or just set it for now as it's the main action.
-            // Given the prompt "Preencher formulário com JSON", I will update the state.
-            onUpdate(parsedData);
-            setSuccessMsg('Currículo importado com sucesso! Revise os dados abaixo.');
+            if (!result || !result.patch) {
+                throw new Error('Falha ao interpretar os dados do currículo.');
+            }
+
+            // 4. Map to local state structure (CVData)
+            const patch = result.patch;
+            const mappedData: CVData = {
+                nome: patch.personal.fullName || '',
+                email: patch.personal.email || '',
+                telefone: patch.personal.phone || '',
+                linkedin: patch.personal.linkedin || '',
+                resumo: stripHtml(patch.summaryHtml || ''),
+                habilidades: Array.isArray(patch.skills) ? patch.skills : [],
+                experiencias: (patch.experience || []).map(exp => {
+                    const { inicio, fim } = parseDateRange(exp.date);
+                    return {
+                        empresa: exp.subtitle || '',
+                        cargo: exp.title || '',
+                        inicio,
+                        fim,
+                        descricao: stripHtml(exp.descriptionHtml || '')
+                    };
+                }),
+                formacao: (patch.education || []).map(edu => {
+                    const { inicio, fim } = parseDateRange(edu.date);
+                    return {
+                        instituicao: edu.subtitle || '',
+                        curso: edu.title || '',
+                        inicio,
+                        fim
+                    };
+                })
+            };
+
+            onUpdate(mappedData);
+            setSuccessMsg('Currículo importado com sucesso pela nossa IA! Revise os dados abaixo.');
+
+            if (result.warnings && result.warnings.length > 0) {
+                console.warn('AI Warnings:', result.warnings);
+            }
+
         } catch (err: any) {
-            console.error(err);
-            setError(err.message || 'Falha ao processar o arquivo.');
+            console.error('Error importing CV:', err);
+            setError(err.message || 'Falha ao processar o arquivo. Tente novamente ou use outro arquivo.');
         } finally {
             setIsProcessing(false);
         }

@@ -39,7 +39,7 @@ export const callOpenAI = async (
             messages: [
                 {
                     role: 'system',
-                    content: 'Você é um extrator de currículos especializado. Retorne APENAS JSON válido, sem markdown, sem comentários, sem texto adicional.'
+                    content: 'Você é um assistente especializado em processamento de currículos. Sua tarefa é retornar APENAS o JSON no formato EXATO solicitado pelo usuário no prompt, sem markdown, sem comentários e sem textos adicionais. Se o prompt pede um campo "data", retorne "data". Se pede "experiencia", retorne "experiencia". Não traduza chaves do JSON.'
                 },
                 { role: 'user', content }
             ],
