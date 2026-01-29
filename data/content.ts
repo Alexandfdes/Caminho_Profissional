@@ -96,14 +96,6 @@ export const faq = [
         answer: 'O comparador permite que você selecione até 3 carreiras e veja uma análise lado a lado com dados sobre salário médio, perspectiva de crescimento, demanda de mercado e nível de satisfação profissional.'
     },
     {
-        question: 'O que está incluído no Plano de Ação?',
-        answer: 'Você recebe um roteiro passo a passo personalizado com: cursos recomendados, certificações importantes, projetos práticos para construir portfólio, estratégias de networking e um cronograma realista para sua transição de carreira.'
-    },
-    {
-        question: 'Preciso pagar para usar a plataforma?',
-        answer: 'A descoberta inicial é gratuita. Para acessar recursos completos como o Plano de Ação detalhado, Comparador de Carreiras e conteúdo exclusivo, oferecemos planos acessíveis. Você pode cancelar a qualquer momento, sem multas.'
-    },
-    {
         question: 'Posso refazer a análise de carreira?',
         answer: 'Sim! Entendemos que as pessoas evoluem. Você pode refazer a Descoberta de Carreira quantas vezes quiser para ver como seus interesses mudaram ao longo do tempo.'
     },
