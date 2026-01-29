@@ -90,11 +90,11 @@
   --editor-text: var(--input-text);
   --editor-muted: var(--muted-text);
 
-    /* Back-compat: keep existing variables wired to new tokens */
-    --cv-input-bg: var(--input-bg);
-    --cv-input-border: var(--input-border);
-    --cv-input-border-hover: var(--input-border-hover);
-    --cv-input-placeholder: var(--input-placeholder);
+  /* Back-compat: keep existing variables wired to new tokens */
+  --cv-input-bg: var(--input-bg);
+  --cv-input-border: var(--input-border);
+  --cv-input-border-hover: var(--input-border-hover);
+  --cv-input-placeholder: var(--input-placeholder);
 
   /* Background: near-imperceptible */
   --cv-bg-gradient: radial-gradient(1100px 650px at 18% 0%, rgba(45, 212, 191, 0.04) 0%, rgba(11, 18, 32, 0) 60%),
@@ -375,6 +375,26 @@
   color: var(--resume-text);
   font-size: var(--resume-body-size);
   line-height: var(--resume-body-line);
+  /* Prevent text overflow */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* Ensure all resume text sections wrap properly */
+.cv-editor-theme .cv-resume-root p,
+.cv-editor-theme .cv-resume-root li,
+.cv-editor-theme .cv-resume-root span,
+.cv-editor-theme .cv-resume-root div {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Prevent long descriptions from overflowing */
+.cv-editor-theme .cv-resume-main .prose {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .cv-editor-theme .cv-resume-sidebar {

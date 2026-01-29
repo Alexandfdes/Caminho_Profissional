@@ -266,12 +266,18 @@ export const TemplateDefault: React.FC<TemplateProps> = ({ data }) => {
         let s = String(dateStr).trim();
         // Remove invisible chars
         s = s.replace(/[\u200B-\u200D\uFEFF]/g, '');
-        // Fix "0 9" -> "09"
+        // Remove extra spaces everywhere
+        s = s.replace(/\s+/g, ' ');
+        // Fix "0 9" -> "09" (digits with space between)
         s = s.replace(/(\d)\s+(\d)/g, '$1$2');
-        // Fix " / " -> "/"
+        // Fix " / " or "/ " or " /" -> "/"
         s = s.replace(/\s*\/\s*/g, '/');
-        // Fix "mai 2024 - set 20 25" -> "mai 2024 - set 2025"
-        return s;
+        // Fix "20 25" -> "2025" (year split)
+        s = s.replace(/\b(19|20)\s*(\d{2})\b/g, '$1$2');
+        // Fix " - " -> " - " (normalize dash spacing)
+        s = s.replace(/\s*[-–—]\s*/g, ' - ');
+        // Trim again
+        return s.trim();
     };
 
     // --- RENDERERS ---
