@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo, forwardRef, memo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, forwardRef, memo } from 'react';
 import { usePDF } from '@react-pdf/renderer';
 import { Document, Page, pdfjs } from 'react-pdf';
-import { Loader2, Download, ZoomIn, ZoomOut, Eye } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { useResumeStore } from '../../stores/resumeStore';
 import { ResumeDocument } from './ResumeDocument';
 import { clsx } from 'clsx';
@@ -144,11 +144,7 @@ interface CVPreviewProps {
 export const CVPreview = memo(forwardRef<HTMLDivElement, CVPreviewProps>((props, ref) => {
     const { scaleOverride } = props;
     const rawData = useResumeStore((state) => state.cvData);
-    const [scale, setScale] = useState(scaleOverride || 1.1);
-
-    useEffect(() => {
-        if (scaleOverride !== undefined) setScale(scaleOverride);
-    }, [scaleOverride]);
+    const scale = scaleOverride || 1.3;
 
     // 1. HIGIENE DE DADOS: Isola apenas o que compõe o PDF
     const pdfData = useMemo(() => {
@@ -181,21 +177,6 @@ export const CVPreview = memo(forwardRef<HTMLDivElement, CVPreviewProps>((props,
 
     return (
         <div ref={ref} className="h-full w-full bg-[#1a1a1a] flex flex-col overflow-hidden shadow-inner">
-            {/* Toolbar Profissional */}
-            <div className="h-12 bg-[#252525] border-b border-white/5 flex items-center justify-between px-4 z-30 shadow-xl">
-                <div className="flex items-center gap-2">
-                    <Eye size={16} className="text-teal-500" />
-                    <span className="text-[11px] font-bold text-gray-400 uppercase tracking-tighter">Visualizador de Documento</span>
-                </div>
-
-                <div className="flex items-center gap-3 bg-black/30 rounded-lg p-1 px-3 border border-white/5">
-                    <button onClick={() => setScale(s => Math.max(0.4, s - 0.1))} className="text-gray-500 hover:text-white transition"><ZoomOut size={16} /></button>
-                    <span className="text-[11px] font-mono text-gray-400 w-10 text-center font-bold">{(scale * 100).toFixed(0)}%</span>
-                    <button onClick={() => setScale(s => Math.min(2.0, s + 0.1))} className="text-gray-500 hover:text-white transition"><ZoomIn size={16} /></button>
-                </div>
-                <div className="w-24" />
-            </div>
-
             <IsolatedPDFViewer data={debouncedData} scale={scale} />
         </div>
     );
