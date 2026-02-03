@@ -88,6 +88,7 @@ const IsolatedPDFViewer = memo(({ data, scale }: IsolatedViewerProps) => {
                                 <Page
                                     pageNumber={1}
                                     scale={scale}
+                                    devicePixelRatio={2}
                                     renderTextLayer={false}
                                     renderAnnotationLayer={false}
                                     className="bg-white"
@@ -106,6 +107,7 @@ const IsolatedPDFViewer = memo(({ data, scale }: IsolatedViewerProps) => {
                                 <Page
                                     pageNumber={1}
                                     scale={scale}
+                                    devicePixelRatio={2}
                                     renderTextLayer={false}
                                     renderAnnotationLayer={false}
                                     onRenderSuccess={() => setIsBufferReady(true)}

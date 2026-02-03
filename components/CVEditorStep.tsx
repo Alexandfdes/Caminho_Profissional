@@ -722,7 +722,7 @@ export const CVEditorStep: React.FC<CVEditorStepProps> = ({ analysis, onBack, us
                     >
                         <CVPreview
                             ref={componentRef}
-                            scaleOverride={1}
+                            scaleOverride={1.3}
                             previewMode={previewMode}
                             paperRounded
                             paperShadow

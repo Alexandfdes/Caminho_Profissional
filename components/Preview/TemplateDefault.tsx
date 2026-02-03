@@ -289,14 +289,25 @@ export const TemplateDefault: React.FC<TemplateProps> = ({ data }) => {
                         {/* Teal header badge */}
                         <div className="cv-resume-badge">
                             <h1 className="cv-resume-name break-words">
-                                {toTitleCaseIfAllCaps(personal?.fields?.fullName || 'Seu Nome')}
+                                {toTitleCaseIfAllCaps([personal?.fields?.firstName, personal?.fields?.lastName].filter(Boolean).join(' ') || 'Seu Nome')}
                             </h1>
                             <p className="cv-resume-role mt-2 break-words">
                                 {personal?.fields?.role || 'Profissional'}
                             </p>
+
+                            {/* Foto do usuário - dentro do badge */}
+                            {personal?.fields?.photo && (
+                                <div className="flex justify-center mt-5">
+                                    <div className="w-[120px] h-[120px] rounded-full border-4 border-white/30 shadow-lg overflow-hidden">
+                                        <img
+                                            src={personal.fields.photo}
+                                            alt="Foto"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
+                                </div>
+                            )}
                         </div>
-                        {/* Sep */}
-                        <div className="cv-resume-badge-sep" />
 
                         <div className="mt-6">
                             {/* Dados pessoais */}
@@ -320,10 +331,10 @@ export const TemplateDefault: React.FC<TemplateProps> = ({ data }) => {
                                             <span className="cv-doc-link cv-doc-contact" title={personal.fields.phone}>{formatPhoneBR(personal.fields.phone)}</span>
                                         </div>
                                     )}
-                                    {personal?.fields?.location && (
+                                    {(personal?.fields?.address || personal?.fields?.city) && (
                                         <div className="resume-contact-item flex items-start gap-2 min-w-0">
                                             <MapPin className="w-3.5 h-3.5 text-[color:var(--resume-muted)] mt-0.5 shrink-0" />
-                                            <span className="break-words">{personal.fields.location}</span>
+                                            <span className="break-words">{[personal?.fields?.address, personal?.fields?.city].filter(Boolean).join(', ')}</span>
                                         </div>
                                     )}
                                     {personal?.fields?.linkedin && (

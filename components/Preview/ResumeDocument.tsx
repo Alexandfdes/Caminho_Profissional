@@ -34,8 +34,8 @@ const Paths = {
 // --- 3. ESTILOS ---
 const colors = {
     accent: '#0f5156',
-    darkText: '#333333',
-    lightText: '#555555',
+    darkText: '#000000',
+    lightText: '#111111',
     bgSidebar: '#F8FAFC',
     divider: '#D1D5DB',
 };
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     name: {
-        fontSize: 16,
+        fontSize: 20,
         color: '#FFFFFF',
         fontFamily: 'Roboto',
         fontWeight: 700,
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         lineHeight: 1.1,
     },
     roleTitle: {
-        fontSize: 10,
+        fontSize: 12,
         color: '#E0E0E0',
         fontFamily: 'Roboto',
         fontWeight: 500,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     sidebarTitle: {
-        fontSize: 10,
+        fontSize: 12,
         color: colors.accent,
         fontFamily: 'Roboto',
         fontWeight: 700,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
     },
     contactText: {
-        fontSize: 8,
+        fontSize: 10,
         color: colors.darkText,
         flex: 1,
         lineHeight: 1.3,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
         gap: 3,
     },
     skillTag: {
-        fontSize: 7.5,
+        fontSize: 9.5,
         backgroundColor: '#E2E8F0',
         paddingVertical: 2,
         paddingHorizontal: 5,
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
         marginBottom: 18,
     },
     sectionTitleMain: {
-        fontSize: 12,
+        fontSize: 16,
         color: colors.accent,
         fontFamily: 'Roboto',
         fontWeight: 700,
@@ -155,26 +155,26 @@ const styles = StyleSheet.create({
         marginBottom: 2,
     },
     itemTitle: {
-        fontSize: 10.5,
+        fontSize: 13,
         fontWeight: 700,
         color: colors.darkText,
         maxWidth: '75%',
     },
     itemDate: {
-        fontSize: 8.5,
+        fontSize: 11,
         fontWeight: 500,
         color: colors.accent,
         textAlign: 'right',
     },
     itemSubtitle: {
-        fontSize: 9,
+        fontSize: 11,
         fontWeight: 700,
         color: colors.lightText,
         marginBottom: 3,
         fontStyle: 'italic',
     },
     description: {
-        fontSize: 8.5,
+        fontSize: 10.5,
         lineHeight: 1.4,
         color: colors.lightText,
         textAlign: 'left',
@@ -335,9 +335,9 @@ export const ResumeDocument: React.FC<{ data: EditableCV }> = ({ data }) => {
                                     <Text style={styles.contactText}>CNH: {fields.driversLicense}</Text>
                                 </View>
                             )}
-                            {(fields.nationality || fields.civilStatus || fields.gender) && (
+                            {(fields.nacionalidade || fields.civilStatus || fields.gender) && (
                                 <View style={{ marginTop: 4, opacity: 0.8 }}>
-                                    {[fields.nationality, fields.civilStatus, fields.gender].filter(Boolean).map((t, i) => (
+                                    {[fields.nacionalidade, fields.civilStatus, fields.gender].filter(Boolean).map((t, i) => (
                                         <Text key={i} style={[styles.contactText, { fontSize: 7, marginBottom: 1 }]}>• {t}</Text>
                                     ))}
                                 </View>
